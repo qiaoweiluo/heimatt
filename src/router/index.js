@@ -6,6 +6,8 @@ import VueRouter from 'vue-router'
 import UserVant from '../views/uservant'
 // 导入组件
 import Login from "../views/login"
+// 导入home组件
+import Home from '../views/home/';
 
 Vue.use(VueRouter)
 
@@ -30,6 +32,12 @@ export default new VueRouter({
       name: 'login', 
       component: Login 
     },
+    // 首页路由
+    {
+      path: '/home',
+      name: 'home',
+      component: Home
+    }
 
   ]
 })
