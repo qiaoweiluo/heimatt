@@ -35,7 +35,8 @@
 <script>
 // import axios from "axios";
 // 在src文件下 可以用@符号代替../..
-import http from '@/utils/http'
+// import http from '@/utils/http'
+import { apiLogin } from '../../api/user'
 export default {
   data() {
     return {
@@ -62,11 +63,8 @@ export default {
         // 这样可以不用在if里面发请求
       }
       // 发请求到服务器,请求数据
-     http({
-        url: "/authorizations",
-        method: "post",
-        data: this.user,
-      }).then(res => {
+     apiLogin(this.user)
+     .then(res => {
         console.log(res)
         // 跳转首页
         this.$router.push('/hone')
