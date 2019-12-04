@@ -33,14 +33,16 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
+      // 输入框数据
       user: {
-        mobile: "",
-        code: ""
+        mobile: "13911111111",
+        code: "246810"
       },
-
+      // 验证提示信息
       yanzheng: {
         // 验证手机号格式错误提示信息
         mobile: "",
@@ -50,11 +52,31 @@ export default {
     };
   },
   methods: {
+    // 登录按钮的点击事件
     login() {
-      if (this.checking()) {
-        console.log('验证通过');
+      if (!this.checking()) {
+        // console.log('验证通过');
+        return;
+        // 这样可以不用在if里面发请求
       }
+      // 发请求到服务器,请求数据
+      axios({
+        url: "http://ttapi.research.itcast.cn/app/v1_0/authorizations",
+        method: "post",
+        data: this.user,
+      }).then(res => {
+        //成功回调
+        // console.log(res)
+        // 跳转首页
+        this.$router.push('/hone')
+      }).catch(error => {
+        // 注意 错误信息的返回有两种方式(后台)
+          // 1. 在res返回值中
+          // 2. 写在catch中(直接返回一个400)
+        console.log("错误信息");
+      });
     },
+    // 验证逻辑的封装
     checking() {
       // 简单的格式验证
       // 菜单按钮的假设思想取代return来判断是否通过
@@ -75,7 +97,7 @@ export default {
         this.yanzheng.code = "";
       }
       // 判断是否向下执行
-      return mobileF && codeF
+      return mobileF && codeF;
     }
   }
 };
