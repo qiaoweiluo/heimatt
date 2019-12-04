@@ -1,11 +1,18 @@
 // 导入vue
 import Vue from 'vue'
+// 导入vanta
+import Vant from 'vant';
+// 导入vant的样式
+import 'vant/lib/index.css';
 // 导入App.vue
 import App from './App.vue'
 // 导入路由
 import router from './router'
 // 导入仓库
 import store from './store'
+
+// 使用vant
+Vue.use(Vant);
 
 // 设置当前为开发环境
 Vue.config.productionTip = false
