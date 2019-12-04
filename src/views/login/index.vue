@@ -36,7 +36,7 @@
 // import axios from "axios";
 // 在src文件下 可以用@符号代替../..
 // import http from '@/utils/http'
-import { apiLogin } from '../../api/user'
+import { apiLogin } from "../../api/user";
 export default {
   data() {
     return {
@@ -56,24 +56,37 @@ export default {
   },
   methods: {
     // 登录按钮的点击事件
-    login() {
+    // async 用来修饰异步函数所在的函数
+    // await 用来修饰异步函数
+    async login() {
       if (!this.checking()) {
         // console.log('验证通过');
         return;
         // 这样可以不用在if里面发请求
       }
-      // 发请求到服务器,请求数据
-     apiLogin(this.user)
-     .then(res => {
-        console.log(res)
-        // 跳转首页
-        this.$router.push('/hone')
-      }).catch(error => {
-        // 注意 错误信息的返回有两种方式(后台)
-          // 1. 在res返回值中
-          // 2. 写在catch中(直接返回一个400)
-        console.log("错误信息");
-      });
+      try {
+        // 发请求到服务器,请求数据
+      let res = await apiLogin(this.user);
+      console.log(res);
+      // 保存信息到 vuex & localStorage 中
+      this.$store.commit('setUser', res.data.data)
+      console.log(this.$store.state.user);
+      
+      // this.$router.push('/hone')
+
+      //  .then(res => {
+      //     console.log(res)
+      //     // 跳转首页
+      //     this.$router.push('/hone')
+      //   }).catch(error => {
+      //     // 注意 错误信息的返回有两种方式(后台)
+      //       // 1. 在res返回值中
+      //       // 2. 写在catch中(直接返回一个400)
+      //     console.log("错误信息");
+      //   });
+      } catch (error) {
+        console.log('出错了');
+      }
     },
     // 验证逻辑的封装
     checking() {
