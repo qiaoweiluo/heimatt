@@ -33,7 +33,9 @@
 </template>
 
 <script>
-import axios from "axios";
+// import axios from "axios";
+// 在src文件下 可以用@符号代替../..
+import http from '@/utils/http'
 export default {
   data() {
     return {
@@ -60,13 +62,12 @@ export default {
         // 这样可以不用在if里面发请求
       }
       // 发请求到服务器,请求数据
-      axios({
-        url: "http://ttapi.research.itcast.cn/app/v1_0/authorizations",
+     http({
+        url: "/authorizations",
         method: "post",
         data: this.user,
       }).then(res => {
-        //成功回调
-        // console.log(res)
+        console.log(res)
         // 跳转首页
         this.$router.push('/hone')
       }).catch(error => {
