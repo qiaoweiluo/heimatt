@@ -42,6 +42,7 @@
     <van-cell-group>
       <van-field v-model="phone" label="手机号" placeholder="请输入手机号" :error-message="errmsg" />
     </van-cell-group>
+    <h3></h3>
   </div>
 </template>
 

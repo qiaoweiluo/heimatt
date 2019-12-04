@@ -26,7 +26,7 @@
       </van-field>
       <!-- 登录按钮 -->
       <div class="myloginbtn">
-        <van-button class="mybtn" @click="login" size="large">登录</van-button>
+        <van-button :loading="isloading" class="mybtn" @click="login" size="large">登录</van-button>
       </div>
     </van-cell-group>
   </div>
@@ -52,42 +52,48 @@ export default {
         mobile: "",
         // 验证码格式错误提示信息
         code: ""
-      }
+      },
+      // 加载效果
+      isloading: false
     };
   },
   methods: {
     // 登录按钮的点击事件
     // async 用来修饰异步函数所在的函数
     // await 用来修饰异步函数
-    async login() {
+    login() {
       if (!this.checking()) {
         // console.log('验证通过');
         return;
         // 这样可以不用在if里面发请求
       }
-      try {
-        // 发请求到服务器,请求数据
-      let res = await apiLogin(this.user);
-      console.log(res);
-      // 保存信息到 vuex & localStorage 中
-      this.$store.commit('setUser', res.data.data)
-      console.log(this.$store.state.user);
-      
-      // this.$router.push('/hone')
+      this.isloading = true;
+      setTimeout(async () => {
+        try {
+          // 发请求到服务器,请求数据
+          let res = await apiLogin(this.user);
+          console.log(res);
+          // 保存信息到 vuex & localStorage 中
+          this.$store.commit("setUser", res.data.data);
+          console.log(this.$store.state.user);
+          // 跳转首页
+          this.$router.push("/hone");
 
-      //  .then(res => {
-      //     console.log(res)
-      //     // 跳转首页
-      //     this.$router.push('/hone')
-      //   }).catch(error => {
-      //     // 注意 错误信息的返回有两种方式(后台)
-      //       // 1. 在res返回值中
-      //       // 2. 写在catch中(直接返回一个400)
-      //     console.log("错误信息");
-      //   });
-      } catch (error) {
-        console.log('出错了');
-      }
+          //  .then(res => {
+          //     console.log(res)
+          //     // 跳转首页
+          //     this.$router.push('/hone')
+          //   }).catch(error => {
+          //     // 注意 错误信息的返回有两种方式(后台)
+          //       // 1. 在res返回值中
+          //       // 2. 写在catch中(直接返回一个400)
+          //     console.log("错误信息");
+          //   });
+        } catch (error) {
+          this.$toast.fail('登录失败');
+        }
+        this.isloading = false;
+      }, 1000);
     },
     // 验证逻辑的封装
     checking() {

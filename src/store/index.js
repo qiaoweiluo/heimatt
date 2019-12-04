@@ -1,6 +1,6 @@
 // 导入了vue
 import Vue from 'vue'
-// 道导入了 vuex 
+// 导入了 vuex 
 import Vuex from 'vuex'
 
 // 按需导入
