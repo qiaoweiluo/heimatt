@@ -1,6 +1,5 @@
 <template>
   <div>
-    我是一个app.vue
     <router-view></router-view>
   </div>
 </template>

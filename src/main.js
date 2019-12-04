@@ -10,6 +10,8 @@ import App from './App.vue'
 import router from './router'
 // 导入仓库
 import store from './store'
+// 导入字体图标
+import "./style/myiconfont.css"
 
 // 使用vant
 Vue.use(Vant);
