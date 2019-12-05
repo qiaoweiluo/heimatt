@@ -42,56 +42,18 @@ export default {
     };
   },
   methods: {
-    onLoad() {
-      // 打开页面时显示 15 条数据
-      console.log("onLoad");
-      // 滚动条在一定范围之内 onLoad方法也会触发 页面内容太少
-      setTimeout(() => {
-        var newlist = [
-          1,
-          2,
-          3,
-          4,
-          5,
-          67,
-          8,
-          9,
-          10,
-          11,
-          12,
-          13,
-          14,
-          15,
-          16,
-          17,
-          18,
-          19,
-          20
-        ];
-        // this.list = newlist;
-        // 加了也没有效果 因为加载完毕后  没有新的数据 所以一直处于一个触底的状态 所有再次执行onload方法 loading 为true 加载
-        //  触底状态 刷新不出新数据的原因是因为 每次都是给空数组赋值 没有新数据 将数据覆盖变成追加
-        // push只能元素  展开运算符 即 拓展运算符
-        this.list = [...this.list, ...newlist];
-        if (this.list.length >= 100) {
-          this.finished = true;
-        }
-        this.loading = false;
-      }, 500);
-    },
-    // 下拉刷新时触发
-    onRefresh() {
-      // 下拉时  方法会触发  isLoading 变成trur
-      setTimeout(() => {
-        // 将所有数据清空
-        this.list = [];
-        this.loading = false;
-        this.finished = false;
-        // 结束下拉状态
-        this.isLoading = false;
-        // 清空数据后 滚动条默认触底 直接重新加载  所以不需要另外加载
-      },2000);
+    // 上拉刷新
+    onLoad() {},
+    // 下拉刷新
+    onRefresh() {},
+    getChannels() {
+      
     }
+  },
+  // 打开页面就要获取频道页面即 DOM元素创建 created钩子
+  created() {
+    // 获取频道数据
+    this.getChannels();
   }
 };
 </script>
