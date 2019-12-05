@@ -30,7 +30,9 @@
 
 <script>
 // 导入频道方法
-import { apiGetChannels } from '../../api/channels';
+import { apiGetChannels } from "../../api/channels";
+// 导入 localstorage 的操作方法
+import { getLocal } from "../../utils/mylocal";
 export default {
   data() {
     return {
@@ -41,7 +43,7 @@ export default {
       finished: false,
       // 下拉刷新的状态 false 刷新结束
       isLoading: false,
-      channelList: [],   // 频道数据源
+      channelList: [] // 频道数据源
     };
   },
   methods: {
@@ -50,10 +52,30 @@ export default {
     // 下拉刷新
     onRefresh() {},
     async getChannels() {
-      // 发送请求到服务器
-      let res = await apiGetChannels()
-      // 频道数据保存
-      this.channelList = res.data.data.channels;
+      // 得到用户信息
+      let user = this.$store.state.user;
+      if (user && user.token) {
+        // 登录过 直接去服务器取出来频道数据
+        let res = await apiGetChannels();
+        // 保存频道数据
+        this.channelList = res.data.data.channels;
+      } else {
+        // 没登录过
+        // 得到localstorage中频道的数据
+        let localchannels = getLocal("channels");
+        // 判断 localstorage 中是否存在频道数据
+        if (localchannels) {
+          // localstorage 存储过频道数据
+          // 取出渲染
+          this.channelList = localchannels;
+        } else {
+          // localstorage 中不存在频道数据
+          // 去服务器中请求默认数据
+          let res = await apiGetChannels();
+          // 保存频道数据
+          this.channelList = res.data.data.channels;
+        }
+      }
     }
   },
   // 打开页面就要获取频道页面即 DOM元素创建 created钩子
