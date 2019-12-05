@@ -3,11 +3,11 @@ import Vue from 'vue'
 // 导入了 vue-router 
 import VueRouter from 'vue-router'
 // 导入组件
-import UserVant from '../views/uservant'
-// 导入组件
-import Login from "../views/login"
-// 导入home组件
+import UserVant from '../views/uservant';
+import Login from "../views/login";
 import Home from '../views/home/';
+import My from '../views/my';
+import Layout from '../views/layout';
 
 Vue.use(VueRouter)
 
@@ -28,16 +28,27 @@ export default new VueRouter({
     },
     // 登录路由
     {
-      path: '/login', 
-      name: 'login', 
-      component: Login 
+      path: '/login',
+      name: 'login',
+      component: Login
     },
-    // 首页路由
+    // tabBar 切换
     {
-      path: '/home',
-      name: 'home',
-      component: Home
+      path: '/layout',
+      component: Layout,
+      // 嵌套路由
+      children: [
+        // home路由
+        {
+          path: '/home',
+          component: Home
+        },
+        // my路由
+        {
+          path: '/my',
+          component: My
+        },
+      ]
     }
-
   ]
 })
