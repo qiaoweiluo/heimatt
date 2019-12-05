@@ -54,8 +54,6 @@ export default {
       let res = await apiGetChannels()
       // 频道数据保存
       this.channelList = res.data.data.channels;
-
-      
     }
   },
   // 打开页面就要获取频道页面即 DOM元素创建 created钩子

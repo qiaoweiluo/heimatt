@@ -77,7 +77,7 @@ export default {
           this.$store.commit("setUser", res.data.data);
           console.log(this.$store.state.user);
           // 跳转首页
-          this.$router.push("/hone");
+          this.$router.push("/home");
 
           //  .then(res => {
           //     console.log(res)
