@@ -7,7 +7,7 @@
       </template>
     </van-nav-bar>
     <!-- 频道区域 -->
-    <van-tabs>
+    <van-tabs v-model="activeChannels">
       <van-tab v-for="(item, index) in channelList" :key="index" :title="item.name">
         <!-- loading 刷新组件的加载状态 -->
         <!-- refresh 下拉刷新时会触发的事件 -->
@@ -17,7 +17,8 @@
           <!-- finished：list 数据是否已经全部加载完毕 -->
           <!-- load：加载数据的方法 -->
           <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
-            <van-cell v-for="item in list" :key="item" :title="item" />
+            <van-cell v-for="(subitem, subindex) in articleList" :key="subindex" :title="subitem.title" />
+            {{ activeChannels }}
           </van-list>
         </van-pull-refresh>
       </van-tab>
@@ -33,6 +34,8 @@
 import { apiGetChannels } from "../../api/channels";
 // 导入 localstorage 的操作方法
 import { getLocal } from "../../utils/mylocal";
+// 导入文的方法
+import { apiGetChannelsArticel } from "../../api/article";
 export default {
   data() {
     return {
@@ -43,12 +46,27 @@ export default {
       finished: false,
       // 下拉刷新的状态 false 刷新结束
       isLoading: false,
-      channelList: [] // 频道数据源
+      channelList: [], // 频道数据源
+      activeChannels: 0, // 当前选中的频道的下标
+      articleList: [] // 频道下的文章列表数据
     };
   },
   methods: {
-    // 上拉刷新
-    onLoad() {},
+    // 当 list 被加载时执行
+    async onLoad() {
+      // 得到当前选中的频道数据
+      let currentChannels = this.channelList[this.activeChannels];
+      // 得到当前频道的 id
+      let channelId = currentChannels.id;
+      // 发送请求到服务器得到当前 id 下面的文章数据
+      let res = await apiGetChannelsArticel({
+        channelid: channelId,
+        timestamp: Date.now()
+      });
+      // console.log(res);
+      // 保存数据
+      this.articleList = res.data.data.results
+    },
     // 下拉刷新
     onRefresh() {},
     async getChannels() {
