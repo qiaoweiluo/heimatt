@@ -8,7 +8,7 @@
     </van-nav-bar>
     <!-- 频道区域 -->
     <van-tabs>
-      <van-tab v-for="index in 8" :key="index" :title="'标签 ' + index">
+      <van-tab v-for="(item, index) in channelList" :key="index" :title="item.name">
         <!-- loading 刷新组件的加载状态 -->
         <!-- refresh 下拉刷新时会触发的事件 -->
         <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
@@ -29,6 +29,8 @@
 </template>
 
 <script>
+// 导入频道方法
+import { apiGetChannels } from '../../api/channels';
 export default {
   data() {
     return {
@@ -38,7 +40,8 @@ export default {
       // finished：list 数据是否已经全部加载完毕 一旦设置为true 就不会再继续加载
       finished: false,
       // 下拉刷新的状态 false 刷新结束
-      isLoading: false
+      isLoading: false,
+      channelList: [],   // 频道数据源
     };
   },
   methods: {
@@ -46,7 +49,12 @@ export default {
     onLoad() {},
     // 下拉刷新
     onRefresh() {},
-    getChannels() {
+    async getChannels() {
+      // 发送请求到服务器
+      let res = await apiGetChannels()
+      // 频道数据保存
+      this.channelList = res.data.data.channels;
+
       
     }
   },

@@ -5,6 +5,7 @@ import http from "../utils/http";
 function apiGetChannels () {
     return http ({
         url: '/user/channels'
+        // 默认就是get 不用设置
     })
 }
 
