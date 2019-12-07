@@ -44,16 +44,15 @@ export default {
   data() {
     return {
       // 数据源
-      list: [],
-      loading: false,
+      // list: [],
+      loading: false, // list的加载状态
       // finished：list 数据是否已经全部加载完毕 一旦设置为true 就不会再继续加载
-      finished: false,
-      // 下拉刷新的状态 false 刷新结束
-      isLoading: false,
+      finished: false, 
+      isLoading: false, // 下拉刷新的状态 false 刷新结束
       channelList: [], // 频道数据源
       activeChannels: 0, // 当前选中的频道的下标
       articleList: [], // 频道下的文章列表数据
-      timestamp: null ,// 请求接口的时间戳 
+      timestamp: null // 请求接口的时间戳
     };
   },
   methods: {
@@ -77,16 +76,27 @@ export default {
       // 追加
       this.articleList = [...this.articleList, ...res.data.data.results];
       // 保存时间戳
-      this.timestamp = res.data.data.pre_timest
+      this.timestamp = res.data.data.pre_timest;
       // 判断返回的数据results是否为空
       if (res.data.data.results.length == 0) {
-        this.finished = true
+        this.finished = true;
       }
       // 关闭加载状态
       this.loading = false;
     },
     // 下拉刷新
-    onRefresh() {},
+    onRefresh() {
+      // 清空数据
+      this.loading = false;
+      this.finished = false;
+      this.articleList = [];
+      this.timestamp = null;
+
+      // 手动重新请求
+      this.onLoad()
+      // 关闭下拉状态
+      this.isLoading = false
+    },
     async getChannels() {
       // 得到用户信息
       let user = this.$store.state.user;
@@ -110,7 +120,6 @@ export default {
           let res = await apiGetChannels();
           // 保存频道数据
           this.channelList = res.data.data.channels;
-         
         }
       }
     }
