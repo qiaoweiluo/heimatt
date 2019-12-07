@@ -88,12 +88,10 @@ export default {
       // 得到当前频道
       let currentChannels = this.channelList[this.activeChannels];
       // 清空数据
-
       currentChannels.loading = false;
       currentChannels.finished = false;
       currentChannels.articleList = [];
       currentChannels.timestamp = null;
-
       // 关闭下拉状态
       currentChannels.isLoading = false
       // 手动重新请求
@@ -131,14 +129,19 @@ export default {
     },
     // 给频道数据源中添加额外属性
     setOtherPropToChannelList() {
-      console.log(this.channelList);
+      // console.log(this.channelList);
       this.channelList.forEach(item => {
-        item.loading = false
-        item.finished = false
-        item.articleList = []
-        item.isLoading = false
-        item.timestamp = null
+        // item.loading = false
+        // item.finished = false
+        // item.articleList = []
+        // item.isLoading = false
+        // item.timestamp = null
         // 加了没有效果
+        this.$set(item,'loading',false)
+        this.$set(item,'finished',false)
+        this.$set(item,'articleList',[])
+        this.$set(item,'isLoading',false)
+        this.$set(item,'timestamp',null)
       });
       
     }
