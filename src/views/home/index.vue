@@ -37,10 +37,9 @@
         <van-icon name="wap-nav" @click="showPop"/>
       </div>
     </van-tabs>
-    <!-- 弹出层 -->
-    <!-- v-model: 用来控制面板的显示和隐藏 -->
-    <!-- position: 面板弹出的位置 -->
-    <van-popup v-model="show" position="bottom" :style="{ height: '90%' }"  />
+    <!-- 频道操作面板的弹出层 -->
+    <!-- <mychannlepop :value='show' @input="show=$event" /> -->
+    <mychannlepop v-model="show"/>
   </div>
 </template>
 
@@ -51,6 +50,8 @@ import { apiGetChannels } from "../../api/channels";
 import { getLocal } from "../../utils/mylocal";
 // 导入文的方法
 import { apiGetChannelsArticel } from "../../api/article";
+// 导入弹出层
+import mychannlepop from '../../components/mychannlepop';
 export default {
   data() {
     return {
@@ -163,6 +164,9 @@ export default {
     showPop() {
       this.show = true
     }
+  },
+  components: {
+    mychannlepop
   },
   // 打开页面就要获取频道页面即 DOM元素创建 created钩子
   created() {
