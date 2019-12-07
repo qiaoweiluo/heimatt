@@ -11,19 +11,20 @@
       <van-tab v-for="(item, index) in channelList" :key="index" :title="item.name">
         <!-- loading 刷新组件的加载状态 -->
         <!-- refresh 下拉刷新时会触发的事件 -->
-        <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+        <van-pull-refresh v-model="item.isLoading" @refresh="onRefresh">
           <!-- vant 的 list 用来展示数据 -->
           <!-- loading list 的加载状态 -->
           <!-- finished：list 数据是否已经全部加载完毕 -->
           <!-- load：加载数据的方法 -->
-          <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
+          <van-list v-model="item.loading" :finished="item.finished" finished-text="没有更多了" @load="onLoad">
+            {{ activeChannels }}
             <van-cell
             style="height:150px"
-              v-for="(subitem, subindex) in articleList"
+              v-for="(subitem, subindex) in item.articleList"
               :key="subindex"
               :title="subitem.title"
             />
-            {{ activeChannels }}
+            
           </van-list>
         </van-pull-refresh>
       </van-tab>
@@ -44,14 +45,11 @@ import { apiGetChannelsArticel } from "../../api/article";
 export default {
   data() {
     return {
-      // 数据源
-      // list: [],
-      loading: false, // list的加载状态
-      // finished：list 数据是否已经全部加载完毕 一旦设置为true 就不会再继续加载
-      finished: false, 
-      isLoading: false, // 下拉刷新的状态 false 刷新结束
       channelList: [], // 频道数据源
       activeChannels: 0, // 当前选中的频道的下标
+      loading: false, // list的加载状态
+      finished: false, // list中的数据源是否加载完毕
+      isLoading: false, // 下拉刷新的状态 false 刷新结束
       articleList: [], // 频道下的文章列表数据
       timestamp: null // 请求接口的时间戳
     };
@@ -67,7 +65,7 @@ export default {
       let res = await apiGetChannelsArticel({
         channelid: channelId,
         // timestamp: Date.now()
-        timestamp: this.timestamp ? this.timestamp : Date.now()
+        timestamp: currentChannels.timestamp ? currentChannels.timestamp : Date.now()
         // timestamp: this.timestamp || Data.now()
       });
       // console.log(res);
@@ -75,29 +73,32 @@ export default {
       // 覆盖 页面一直刷新 请求回来的十条数据不能撑开页面 list一直处于触底状态
       // this.articleList = res.data.data.results;
       // 追加
-      this.articleList = [...this.articleList, ...res.data.data.results];
+      currentChannels.articleList = [...currentChannels.articleList, ...res.data.data.results];
       // 保存时间戳
-      this.timestamp = res.data.data.pre_timest;
+      currentChannels.timestamp = res.data.data.pre_timest;
       // 判断返回的数据results是否为空
       if (res.data.data.results.length == 0) {
-        this.finished = true;
+        currentChannels.finished = true;
       }
       // 关闭加载状态
-      this.loading = false;
+      currentChannels.loading = false;
     },
     // 下拉刷新
     onRefresh() {
+      // 得到当前频道
+      let currentChannels = this.channelList[this.activeChannels];
       // 清空数据
-      this.loading = false;
-      this.finished = false;
-      this.articleList = [];
-      this.timestamp = null;
 
+      currentChannels.loading = false;
+      currentChannels.finished = false;
+      currentChannels.articleList = [];
+      currentChannels.timestamp = null;
+
+      // 关闭下拉状态
+      currentChannels.isLoading = false
       // 手动重新请求
       this.onLoad()
       // 下拉bug 下拉加载后  只能加载十条数据 并且不能上拉加载更多 重新让元素触底 cell加一个宽度
-      // 关闭下拉状态
-      this.isLoading = false
     },
     async getChannels() {
       // 得到用户信息
@@ -124,6 +125,22 @@ export default {
           this.channelList = res.data.data.channels;
         }
       }
+      // 频道数据源已经加载完毕
+      // 给这些频道数据添加额外属性
+      this.setOtherPropToChannelList() 
+    },
+    // 给频道数据源中添加额外属性
+    setOtherPropToChannelList() {
+      console.log(this.channelList);
+      this.channelList.forEach(item => {
+        item.loading = false
+        item.finished = false
+        item.articleList = []
+        item.isLoading = false
+        item.timestamp = null
+        // 加了没有效果
+      });
+      
     }
   },
   // 打开页面就要获取频道页面即 DOM元素创建 created钩子
