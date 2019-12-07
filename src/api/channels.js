@@ -16,5 +16,17 @@ function apiGetAllChannels() {
     });
   }
 
+  // 重置频道数据
+function apiResetChannels(channels) {
+    return http({
+      url: "/user/channels",
+      method: "PUT",
+      data: {
+        channels: channels
+      }
+    });
+  }
+  
+
 // 按需导出
-export { apiGetChannels, apiGetAllChannels}
+export { apiGetChannels, apiGetAllChannels, apiResetChannels}

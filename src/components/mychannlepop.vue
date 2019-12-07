@@ -23,7 +23,12 @@
       <van-cell title="频道推荐"></van-cell>
       <!-- 频道推荐的列表 -->
       <van-grid>
-        <van-grid-item  @click="addChannel(item)" :text="item.name" v-for="(item, index) in otherChannels" :key="index" />
+        <van-grid-item
+          @click="addChannel(item)"
+          :text="item.name"
+          v-for="(item, index) in otherChannels"
+          :key="index"
+        />
       </van-grid>
     </van-popup>
   </div>
@@ -54,9 +59,30 @@ export default {
     },
     // 添加频道
     async addChannel(item) {
-        // 修改 show 属性时不能修改 修改 channelsList 时可以修改
-        // 原因： show 是一个简单数据类型  channelsList  是一个复杂数据类型
-      this.channelList.push(item)
+      // 修改 show 属性时不能修改 修改 channelsList 时可以修改
+      // 原因： show 是一个简单数据类型  channelsList  是一个复杂数据类型
+      // 将 item 添加到 channelList 中
+      this.channelList.push(item);
+      // 判断用户是否登录
+      let token = this.$store.state.user.token;
+      if (token) {
+        // 说明已经登录
+        // 将新的频道数据生成一个 channels 数组
+        // 从数组中去掉第一个元素
+        let channels = this.channelList.slice(1).map((item, index) => {
+          return {
+            id: item.id,
+            seq: index + 2
+          };
+        });
+        // 将新的频道数据 channels 提交到服务器
+        let res = await apiResetChannels(channels);
+        console.log(res);
+      } else {
+        // 说明未登录
+        // 将频道数据保存到本地
+        setLocal("channels", this.channelList);
+      }
     }
   },
   // 计算属性：
