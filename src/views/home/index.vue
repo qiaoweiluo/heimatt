@@ -17,7 +17,11 @@
           <!-- finished：list 数据是否已经全部加载完毕 -->
           <!-- load：加载数据的方法 -->
           <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
-            <van-cell v-for="(subitem, subindex) in articleList" :key="subindex" :title="subitem.title" />
+            <van-cell
+              v-for="(subitem, subindex) in articleList"
+              :key="subindex"
+              :title="subitem.title"
+            />
             {{ activeChannels }}
           </van-list>
         </van-pull-refresh>
@@ -48,7 +52,8 @@ export default {
       isLoading: false,
       channelList: [], // 频道数据源
       activeChannels: 0, // 当前选中的频道的下标
-      articleList: [] // 频道下的文章列表数据
+      articleList: [], // 频道下的文章列表数据
+      timestamp: null ,// 请求接口的时间戳 
     };
   },
   methods: {
@@ -61,11 +66,24 @@ export default {
       // 发送请求到服务器得到当前 id 下面的文章数据
       let res = await apiGetChannelsArticel({
         channelid: channelId,
-        timestamp: Date.now()
+        // timestamp: Date.now()
+        timestamp: this.timestamp ? this.timestamp : Date.now()
+        // timestamp: this.timestamp || Data.now()
       });
       // console.log(res);
       // 保存数据
-      this.articleList = res.data.data.results
+      // 覆盖 页面一直刷新 请求回来的十条数据不能撑开页面 list一直处于触底状态
+      // this.articleList = res.data.data.results;
+      // 追加
+      this.articleList = [...this.articleList, ...res.data.data.results];
+      // 保存时间戳
+      this.timestamp = res.data.data.pre_timest
+      // 判断返回的数据results是否为空
+      if (res.data.data.results.length == 0) {
+        this.finished = true
+      }
+      // 关闭加载状态
+      this.loading = false;
     },
     // 下拉刷新
     onRefresh() {},
@@ -92,6 +110,7 @@ export default {
           let res = await apiGetChannels();
           // 保存频道数据
           this.channelList = res.data.data.channels;
+         
         }
       }
     }
