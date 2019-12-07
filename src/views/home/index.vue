@@ -18,6 +18,7 @@
           <!-- load：加载数据的方法 -->
           <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
             <van-cell
+            style="height:150px"
               v-for="(subitem, subindex) in articleList"
               :key="subindex"
               :title="subitem.title"
@@ -94,6 +95,7 @@ export default {
 
       // 手动重新请求
       this.onLoad()
+      // 下拉bug 下拉加载后  只能加载十条数据 并且不能上拉加载更多 重新让元素触底 cell加一个宽度
       // 关闭下拉状态
       this.isLoading = false
     },
