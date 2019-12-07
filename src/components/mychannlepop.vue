@@ -38,7 +38,7 @@
 // 导入频道操作的接口
 import { apiGetAllChannels, apiResetChannels } from "../api/channels";
 // 操作 local 的接口
-import { setLocal } from '../utils/mylocal'
+import { setLocal } from "../utils/mylocal";
 export default {
   // 面板的显示与隐藏  我的频道列表
   props: ["value", "channelList"],
@@ -61,6 +61,12 @@ export default {
     },
     // 添加频道
     async addChannel(item) {
+      // 给 item 添加一个些额外属性
+      this.$set(item, "loading", false);
+      this.$set(item, "finished", false);
+      this.$set(item, "articleList", []);
+      this.$set(item, "isLoading", false);
+      this.$set(item, "timestamp", null);
       // 修改 show 属性时不能修改 修改 channelsList 时可以修改
       // 原因： show 是一个简单数据类型  channelsList  是一个复杂数据类型
       // 将 item 添加到 channelList 中
