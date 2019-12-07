@@ -29,9 +29,11 @@
         </van-pull-refresh>
       </van-tab>
       <div class="menuIcon">
-        <van-icon name="wap-nav" />
+        <van-icon name="wap-nav" @click="showPop" />
       </div>
     </van-tabs>
+    <!-- 频道操作面板的弹出层 -->
+    <mychannlepop v-model="show"/>
   </div>
 </template>
 
@@ -42,6 +44,7 @@ import { apiGetChannels } from "../../api/channels";
 import { getLocal } from "../../utils/mylocal";
 // 导入文的方法
 import { apiGetChannelsArticel } from "../../api/article";
+import mychannlepop from '../../components/mychannlepop';
 export default {
   data() {
     return {
@@ -51,7 +54,8 @@ export default {
       finished: false, // list中的数据源是否加载完毕
       isLoading: false, // 下拉刷新的状态 false 刷新结束
       articleList: [], // 频道下的文章列表数据
-      timestamp: null // 请求接口的时间戳
+      timestamp: null ,// 请求接口的时间戳
+      show: false,
     };
   },
   methods: {
@@ -144,13 +148,20 @@ export default {
         this.$set(item,'timestamp',null)
       });
       
+    },
+    // 点击菜单显示 
+    showPop() {
+      this.show = true
     }
   },
   // 打开页面就要获取频道页面即 DOM元素创建 created钩子
   created() {
     // 获取频道数据
     this.getChannels();
-  }
+  },
+  components: {
+    mychannlepop
+  },
 };
 </script>
 
