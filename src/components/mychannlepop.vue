@@ -17,14 +17,11 @@
       </van-cell>
       <!-- 我的频道的列表 -->
       <van-grid>
-        <van-grid-item icon="photo-o" text="文字" />
-        <van-grid-item icon="photo-o" text="文字" />
-        <van-grid-item icon="photo-o" text="文字" />
-        <van-grid-item icon="photo-o" text="文字" />
+        <van-grid-item  :text="item.name" v-for="(item, index) in channelList" :key='index' />
       </van-grid>
       <!-- 频道推荐 -->
       <van-cell title="频道推荐"></van-cell>
-      <!-- 频道的列表 -->
+      <!-- 频道推荐的列表 -->
       <van-grid>
         <van-grid-item icon="photo-o" text="文字" />
         <van-grid-item icon="photo-o" text="文字" />
@@ -37,7 +34,8 @@
 
 <script>
 export default {
-  props: ["value"]
+    // 面板的显示与隐藏  我的频道列表
+  props: ["value","channelList"]
 };
 </script>
 
