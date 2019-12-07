@@ -37,6 +37,8 @@
 <script>
 // 导入频道操作的接口
 import { apiGetAllChannels, apiResetChannels } from "../api/channels";
+// 操作 local 的接口
+import { setLocal } from '../utils/mylocal'
 export default {
   // 面板的显示与隐藏  我的频道列表
   props: ["value", "channelList"],
