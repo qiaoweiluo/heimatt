@@ -9,5 +9,12 @@ function apiGetChannels () {
     })
 }
 
+// 得到所有的频道数据
+function apiGetAllChannels() {
+    return http({
+      url: "/channels"
+    });
+  }
+
 // 按需导出
-export { apiGetChannels}
+export { apiGetChannels, apiGetAllChannels}

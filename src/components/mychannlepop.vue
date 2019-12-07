@@ -23,19 +23,57 @@
       <van-cell title="频道推荐"></van-cell>
       <!-- 频道推荐的列表 -->
       <van-grid>
-        <van-grid-item icon="photo-o" text="文字" />
-        <van-grid-item icon="photo-o" text="文字" />
-        <van-grid-item icon="photo-o" text="文字" />
-        <van-grid-item icon="photo-o" text="文字" />
+        <van-grid-item  :text="item.name" v-for="(item, index) in otherChannels" :key='index' />
       </van-grid>
     </van-popup>
   </div>
 </template>
 
 <script>
+// 导入频道操作的接口
+import { apiGetAllChannels, apiResetChannels } from '../api/channels'
 export default {
     // 面板的显示与隐藏  我的频道列表
-  props: ["value","channelList"]
+  props: ["value","channelList"],
+  data() {
+      return {
+          // 所有的频道数据
+            allChannels: [],
+      }
+  },
+  methods: {
+      // 得到所有的频道数据
+        async getAllChannels() {
+            try {
+                let res = await apiGetAllChannels()
+                this.allChannels = res.data.data.channels
+                console.log(this.allChannels)
+            } catch (error) {
+                console.log('error')
+            }
+        },
+  },
+  computed: {
+        // 频道推荐的数据源
+        otherChannels: function() {
+            // 返回 allChannels 中 channelList 不存在的元素
+            // 1）得到 channelList 中所有元素的 id 的集合
+            let idsArr = this.channelList.map(item => {
+                return item.id
+            })
+            // 2)取出数据
+            let resArr = this.allChannels.filter(item => {
+                // 返回所有 item.id 不在 idsArr 中的元素
+                return idsArr.indexOf(item.id) === -1
+            })
+            // 返回新的数组
+            return resArr
+        }
+    },
+  created() {
+        // 得到所有的频道数据
+        this.getAllChannels()
+    }
 };
 </script>
 
