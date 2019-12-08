@@ -61,7 +61,7 @@
 
 <script>
 // 导入频道操作的接口
-import { apiGetAllChannels, apiResetChannels } from "../api/channels";
+import { apiGetAllChannels, apiResetChannels, apiGetChannels } from "../api/channels";
 // 操作 local 的接口
 import { setLocal } from "../utils/mylocal";
 export default {
@@ -120,10 +120,27 @@ export default {
       }
     },
     // 删除频道 
-    delchannel(index) {
+    async delchannel(index) {
       // index 当前点击频道的下标
       // 将当前点击的频道数据从我的频道中删除
       this.channelList.splice(index, 1)
+      let token = this.$store.state.user.token
+      // 判断用户是否登录
+      if(token) {
+        // 已经登录
+        // 根据新的频道数据 生成channels
+        let channels = this.channelList.slice(1).map((item, index) => {
+          return {
+            id: item.id,
+            seq: index + 2
+          }
+        })
+        // 提交到服务器
+        await apiResetChannels(channels)
+      } else {
+        // 未登录存本地
+        setLocal('channels', this.channelList)
+      }
     }
   },
   // 计算属性：
