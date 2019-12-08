@@ -9,5 +9,24 @@ function apiGetChannels () {
     })
 }
 
+// 得到所有的频道数据
+function apiGetAllChannels() {
+    return http({
+      url: "/channels"
+    });
+  }
+
+  // 重置频道数据
+function apiResetChannels(channels) {
+    return http({
+      url: "/user/channels",
+      method: "PUT",
+      data: {
+        channels: channels
+      }
+    });
+  }
+  
+
 // 按需导出
-export { apiGetChannels}
+export { apiGetChannels, apiGetAllChannels, apiResetChannels}

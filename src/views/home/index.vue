@@ -34,6 +34,7 @@
       </van-tab>
       <!-- 频道列表的菜单图标按钮 -->
       <div class="menuIcon">
+<<<<<<< HEAD
         <van-icon name="wap-nav" @click="showPop"/>
       </div>
     </van-tabs>
@@ -41,6 +42,22 @@
     <!-- v-model: 用来控制面板的显示和隐藏 -->
     <!-- position: 面板弹出的位置 -->
     <van-popup v-model="show" position="bottom" :style="{ height: '90%' }"  />
+=======
+        <van-icon name="wap-nav" @click="showPop" />
+      </div>
+    </van-tabs>
+    <!-- 频道操作面板的弹出层 -->
+
+    <!-- <mychannlepop @update:activeChannels="activeChannels=$event" :activeChannels="activeChannels" :channelList='channelList' v-model="show"/> -->
+    
+    <!-- 因为后面已经使用了v-model 所以不能使用双向绑定来简写 -->
+    <!-- 如果一个数据与一个组件存在双向数据绑定的关系,除了可以使用v-model之外 还可以使用 sycn -->
+    <!-- sycn 可以做两件事 -->
+    <!-- 1. 向子组件传入一个数据 -->
+    <!-- 2. 接受子组件中返回的数据,并且赋值给sync 修改的数据(返回数据的事件名一定要注意: update:传回数据的事件名 update后面必须是事件名) -->
+    <mychannlepop :activeChannels.sync="activeChannels" :channelList='channelList' v-model="show"/>
+
+>>>>>>> popup
   </div>
 </template>
 
@@ -51,17 +68,27 @@ import { apiGetChannels } from "../../api/channels";
 import { getLocal } from "../../utils/mylocal";
 // 导入文的方法
 import { apiGetChannelsArticel } from "../../api/article";
+import mychannlepop from '../../components/mychannlepop';
 export default {
   data() {
     return {
       channelList: [], // 频道数据源
       activeChannels: 0, // 当前选中的频道的下标
+<<<<<<< HEAD
       // loading: false, // list的加载状态
       // finished: false, // list中的数据源是否加载完毕
       // isLoading: false, // 下拉刷新的状态 false 刷新结束
       // articleList: [], // 频道下的文章列表数据
       // timestamp: null ,// 请求接口的时间戳
       show: false,   // 弹出层是否显示
+=======
+      loading: false, // list的加载状态
+      finished: false, // list中的数据源是否加载完毕
+      isLoading: false, // 下拉刷新的状态 false 刷新结束
+      articleList: [], // 频道下的文章列表数据
+      timestamp: null ,// 请求接口的时间戳
+      show: false,
+>>>>>>> popup
     };
   },
   methods: {
@@ -158,8 +185,14 @@ export default {
         this.$set(item, "isLoading", false);
         this.$set(item, "timestamp", null);
       });
+<<<<<<< HEAD
     },
     // 点击菜单按钮时会触发 
+=======
+      
+    },
+    // 点击菜单显示 
+>>>>>>> popup
     showPop() {
       this.show = true
     }
@@ -168,7 +201,10 @@ export default {
   created() {
     // 获取频道数据
     this.getChannels();
-  }
+  },
+  components: {
+    mychannlepop
+  },
 };
 </script>
 
@@ -185,7 +221,7 @@ export default {
   }
   // 由于在当前样式中添加了scoped属性  所以当前样式无法作用到子组件中 使用深度选择器 可以直接让当前样式直接作用于子组件中
   // 频道列表
-  /deep/ .van-tabs__wrap.van-tabs__wrap--scrollable.van-hairline--top-bottom {
+  /deep/ .van-tabs__wrap {
     position: fixed;
     top: 46px;
     left: 0;
