@@ -33,7 +33,16 @@
       </div>
     </van-tabs>
     <!-- 频道操作面板的弹出层 -->
-    <mychannlepop @update:activeChannels="activeChannels=$event" :activeChannels="activeChannels" :channelList='channelList' v-model="show"/>
+
+    <!-- <mychannlepop @update:activeChannels="activeChannels=$event" :activeChannels="activeChannels" :channelList='channelList' v-model="show"/> -->
+    
+    <!-- 因为后面已经使用了v-model 所以不能使用双向绑定来简写 -->
+    <!-- 如果一个数据与一个组件存在双向数据绑定的关系,除了可以使用v-model之外 还可以使用 sycn -->
+    <!-- sycn 可以做两件事 -->
+    <!-- 1. 向子组件传入一个数据 -->
+    <!-- 2. 接受子组件中返回的数据,并且赋值给sync 修改的数据(返回数据的事件名一定要注意: update:传回数据的事件名 update后面必须是事件名) -->
+    <mychannlepop :activeChannels.sync="activeChannels" :channelList='channelList' v-model="show"/>
+
   </div>
 </template>
 
