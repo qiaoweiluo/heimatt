@@ -12,12 +12,20 @@
       <!-- 我的频道 -->
       <van-cell title="我的频道">
         <template slot="default">
-          <van-button plain type="danger" size="mini">编辑</van-button>
+          <van-button plain round type="danger" size="mini"  v-if="sonIcon===false" @click="sonIcon = true">编辑</van-button>
+          <van-button plain round type="danger" size="mini" v-if="sonIcon===true" @click="sonIcon = false">完成</van-button>
+          
         </template>
       </van-cell>
       <!-- 我的频道的列表 -->
       <van-grid>
-        <van-grid-item :text="item.name" v-for="(item, index) in channelList" :key="index" />
+        <van-grid-item  class="fatheritem" :text="item.name" v-for="(item, index) in channelList" :key="index">
+          <template slot="text">
+            {{ item.name }}
+        <van-icon name="clear" v-if="sonIcon" class="sonicon" />
+
+          </template>
+        </van-grid-item>
       </van-grid>
       <!-- 频道推荐 -->
       <van-cell title="频道推荐"></van-cell>
@@ -45,7 +53,9 @@ export default {
   data() {
     return {
       // 所有的频道数据
-      allChannels: []
+      allChannels: [],
+      // 图标默认隐藏 
+      sonIcon: false,
     };
   },
   methods: {
@@ -120,5 +130,14 @@ export default {
 };
 </script>
 
-<style>
+<style lang='less' scoped>
+.fatheritem {
+    position: relative;
+    .sonicon {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        color: #ccc;
+    }
+}
 </style>
