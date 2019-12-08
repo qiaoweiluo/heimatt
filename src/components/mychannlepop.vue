@@ -45,7 +45,7 @@
             <div @click="changeChannel(index)" :class="{active: index === activeChannels}">
               {{ item.name }}
             </div>
-            <van-icon name="clear" v-if="sonIcon && index !== 0" class="sonicon" @click="delchannel(index)" />
+            <van-icon name="clear" v-if="sonIcon && index !== 0" class="sonicon" @click.stop="delchannel(index)" />
           </template>
         </van-grid-item>
       </van-grid>
