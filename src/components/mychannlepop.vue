@@ -39,7 +39,12 @@
           :key="index"
         >
           <template slot="text">
-            {{ item.name }}
+            <!-- 通过对象的方式动态绑定样式 -->
+            <!-- 第二种方式： :class="{'类名1':bool,'类名2':bool} -->
+            <!-- 应用场景：切换类名来切换样式 -->
+            <div @click="changeChannel(index)" :class="{active: index === activeChannels}">
+              {{ item.name }}
+            </div>
             <van-icon name="clear" v-if="sonIcon && index !== 0" class="sonicon" @click="delchannel(index)" />
           </template>
         </van-grid-item>
@@ -65,8 +70,8 @@ import { apiGetAllChannels, apiResetChannels, apiGetChannels } from "../api/chan
 // 操作 local 的接口
 import { setLocal } from "../utils/mylocal";
 export default {
-  // 面板的显示与隐藏  我的频道列表
-  props: ["value", "channelList"],
+  // 面板的显示与隐藏  我的频道列表 当前选中的频道的下标
+  props: ["value", "channelList", "activeChannels"],
   data() {
     return {
       // 所有的频道数据
@@ -141,6 +146,11 @@ export default {
         // 未登录存本地
         setLocal('channels', this.channelList)
       }
+    },
+    // 修改频道
+    changeChannel(index) {
+      // index要切换的下标 传入父组件 home
+      this.$emit("update:activeChannels", index)
     }
   },
   // 计算属性：
@@ -179,5 +189,8 @@ export default {
     right: 0px;
     color: #ccc;
   }
+}
+.active {
+  color: red;
 }
 </style>

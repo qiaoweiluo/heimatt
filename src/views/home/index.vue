@@ -33,7 +33,7 @@
       </div>
     </van-tabs>
     <!-- 频道操作面板的弹出层 -->
-    <mychannlepop :channelList='channelList' v-model="show"/>
+    <mychannlepop @update:activeChannels="activeChannels=$event" :activeChannels="activeChannels" :channelList='channelList' v-model="show"/>
   </div>
 </template>
 
