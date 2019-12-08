@@ -12,18 +12,35 @@
       <!-- 我的频道 -->
       <van-cell title="我的频道">
         <template slot="default">
-          <van-button plain round type="danger" size="mini"  v-if="sonIcon===false" @click="sonIcon = true">编辑</van-button>
-          <van-button plain round type="danger" size="mini" v-if="sonIcon===true" @click="sonIcon = false">完成</van-button>
-          
+          <van-button
+            plain
+            round
+            type="danger"
+            size="mini"
+            v-if="sonIcon===false"
+            @click="sonIcon = true"
+          >编辑</van-button>
+          <van-button
+            plain
+            round
+            type="danger"
+            size="mini"
+            v-if="sonIcon===true"
+            @click="sonIcon = false"
+          >完成</van-button>
         </template>
       </van-cell>
       <!-- 我的频道的列表 -->
       <van-grid>
-        <van-grid-item  class="fatheritem" :text="item.name" v-for="(item, index) in channelList" :key="index">
+        <van-grid-item
+          class="fatheritem"
+          :text="item.name"
+          v-for="(item, index) in channelList"
+          :key="index"
+        >
           <template slot="text">
             {{ item.name }}
-        <van-icon name="clear" v-if="sonIcon" class="sonicon" />
-
+            <van-icon name="clear" v-if="sonIcon && index !== 0" class="sonicon" @click="delchannel(index)" />
           </template>
         </van-grid-item>
       </van-grid>
@@ -54,8 +71,8 @@ export default {
     return {
       // 所有的频道数据
       allChannels: [],
-      // 图标默认隐藏 
-      sonIcon: false,
+      // 图标默认隐藏
+      sonIcon: false
     };
   },
   methods: {
@@ -101,6 +118,12 @@ export default {
         // 将频道数据保存到本地
         setLocal("channels", this.channelList);
       }
+    },
+    // 删除频道 
+    delchannel(index) {
+      // index 当前点击频道的下标
+      // 将当前点击的频道数据从我的频道中删除
+      this.channelList.splice(index, 1)
     }
   },
   // 计算属性：
@@ -132,12 +155,12 @@ export default {
 
 <style lang='less' scoped>
 .fatheritem {
-    position: relative;
-    .sonicon {
-        position: absolute;
-        top: 0px;
-        right: 0px;
-        color: #ccc;
-    }
+  position: relative;
+  .sonicon {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    color: #ccc;
+  }
 }
 </style>
