@@ -178,7 +178,7 @@ export default {
   }
   // 由于在当前样式中添加了scoped属性  所以当前样式无法作用到子组件中 使用深度选择器 可以直接让当前样式直接作用于子组件中
   // 频道列表
-  /deep/ .van-tabs__wrap.van-tabs__wrap--scrollable.van-hairline--top-bottom {
+  /deep/ .van-tabs__wrap {
     position: fixed;
     top: 46px;
     left: 0;
